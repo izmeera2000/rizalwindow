@@ -24,5 +24,5 @@ void loop()
   Serial.print("\t\t");
   Serial.print(temperature, 1);
   Serial.print("\t\t");
-  Serial.println(dht.toFahrenheit(temperature), 1);	/* Convert temperature to Fahrenheit units */
+  Serial.println(temperature), 1);	/* Convert temperature to Fahrenheit units */
 }
