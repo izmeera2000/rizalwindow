@@ -20,7 +20,7 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
-  Serial.begin(9600); // Output status on Uno serial monitor
+  Serial.begin(115200); // Output status on Uno serial monitor
   Serial.println("DHTxx test!");
  
   dht.begin();
