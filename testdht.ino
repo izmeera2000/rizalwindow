@@ -11,7 +11,7 @@
 //#define DHTTYPE DHT21   // DHT 21 (AM2301)
 
 
-// Connect pin 1 (on the left) of the sensor to +5V
+// Connect pin 1 (on the left) ovf the sensor to +5V
 // Connect pin 2 of the sensor to whatever your DHTPIN is
 // Connect pin 4 (on the right) of the sensor to GROUND
 // Connect a 10K resistor from pin 2 (data) to pin 1 (power) 
@@ -22,7 +22,8 @@ DHT dht(DHTPIN, DHTTYPE);
 void setup() {
   Serial.begin(115200); // Output status on Uno serial monitor
   Serial.println("DHTxx test!");
- 
+   pinMode (2 , INPUT);
+
   dht.begin();
 }
 
@@ -31,6 +32,8 @@ void loop() {
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   int8_t h = dht.readHumidity();
   int16_t t = dht.readTemperature(1);
+    int digital = digitalRead(2);
+
 
   // check if returns are valid then something went wrong!
   if ( t == BAD_TEMP || h == BAD_HUM ) { // if error conditions          
@@ -42,6 +45,8 @@ void loop() {
     Serial.print("Temperature: "); 
     Serial.print(t);
     Serial.println(" *C");
+      Serial.println (digital);
+
   }
   delay(2000);
 }
