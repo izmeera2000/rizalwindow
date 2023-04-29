@@ -66,7 +66,9 @@ void loop()
     Serial.print("Temperature: ");
     Serial.print(t);
     Serial.println(" *C");
-    Serial.println(outputValue);
+    Serial.print(outputValue);
+    Serial.println(" rain sensor ");
+
     if (t >= 30)
     {
       digitalWrite(IN3_PIN, HIGH);
