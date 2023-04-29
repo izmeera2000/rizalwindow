@@ -51,7 +51,8 @@ void loop()
   int16_t t = dht.readTemperature(1);
 
   int sensorValue = analogRead(RAINPIN);
-
+    Serial.print(sensorValue);
+    Serial.println(" rain sensor ");
   // check if returns are valid then something went wrong!
   if (t == BAD_TEMP || h == BAD_HUM)
   { // if error conditions
@@ -65,8 +66,7 @@ void loop()
     Serial.print("Temperature: ");
     Serial.print(t);
     Serial.println(" *C");
-    Serial.print(sensorValue);
-    Serial.println(" rain sensor ");
+
 
     if (t >= 30)
     {
