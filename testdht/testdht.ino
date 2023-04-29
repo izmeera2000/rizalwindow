@@ -4,6 +4,7 @@
 #include "TinyDHT.h"
 
 #define DHTPIN 2 // DHT connected to Arduino Uno Digital Pin 2
+#define RAINPIN A0
 
 // Uncomment whatever type you're using!
 #define DHTTYPE DHT11 // DHT 11
@@ -12,6 +13,9 @@
 const int ENA_PIN = 7; // the Arduino pin connected to the EN1 pin L298N
 const int IN1_PIN = 6; // the Arduino pin connected to the IN1 pin L298N
 const int IN2_PIN = 5; // the Arduino pin connected to the IN2 pin L298N
+
+const int IN3_PIN = 3; // the Arduino pin connected to the IN3 pin L298N
+const int IN4_PIN = 4; // the Arduino pin connected to the IN4 pin L298N
 // Connect pin 1 (on the left) ovf the sensor to +5V
 // Connect pin 2 of the sensor to whatever your DHTPIN is
 // Connect pin 4 (on the right) of the sensor to GROUND
@@ -45,7 +49,9 @@ void loop()
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   int8_t h = dht.readHumidity();
   int16_t t = dht.readTemperature(1);
-  int digital = digitalRead(2);
+
+  int sensorValue = analogRead(RAINPIN);
+  int outputValue = map(sensorValue, 0, 1023, 255, 0); // map the 10-bit data to 8-bit data
 
   // check if returns are valid then something went wrong!
   if (t == BAD_TEMP || h == BAD_HUM)
@@ -60,17 +66,16 @@ void loop()
     Serial.print("Temperature: ");
     Serial.print(t);
     Serial.println(" *C");
-    Serial.println(digital);
-
-    if (t > 29)
+    Serial.println(outputValue);
+    if (t >= 30)
     {
-      digitalWrite(IN1_PIN, HIGH);
-      digitalWrite(IN2_PIN, LOW);
+      digitalWrite(IN3_PIN, HIGH);
+      digitalWrite(IN4_PIN, LOW);
     }
     else
     {
-      digitalWrite(IN1_PIN, LOW);
-      digitalWrite(IN2_PIN, HIGH);
+      digitalWrite(IN3_PIN, LOW);
+      digitalWrite(IN4_PIN, HIGH);
     }
   }
   delay(2000);
