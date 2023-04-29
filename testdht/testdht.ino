@@ -51,7 +51,6 @@ void loop()
   int16_t t = dht.readTemperature(1);
 
   int sensorValue = analogRead(RAINPIN);
-  int outputValue = map(sensorValue, 0, 1023, 255, 0); // map the 10-bit data to 8-bit data
 
   // check if returns are valid then something went wrong!
   if (t == BAD_TEMP || h == BAD_HUM)
@@ -66,7 +65,7 @@ void loop()
     Serial.print("Temperature: ");
     Serial.print(t);
     Serial.println(" *C");
-    Serial.print(outputValue);
+    Serial.print(sensorValue);
     Serial.println(" rain sensor ");
 
     if (t >= 30)
