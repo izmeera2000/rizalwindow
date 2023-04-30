@@ -56,7 +56,6 @@ void loop()
 
   if (sensorValue >= 800)
   {
-
     digitalWrite(IN1_PIN, LOW);
     digitalWrite(IN2_PIN, HIGH);
     Serial.print("bUKA ");
@@ -81,7 +80,7 @@ void loop()
     Serial.print(t);
     Serial.println(" *C");
 
-    if (t >= 30)
+    if (t <= 30)
     {
       digitalWrite(IN3_PIN, HIGH);
       digitalWrite(IN4_PIN, LOW);
