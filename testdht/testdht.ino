@@ -2,6 +2,10 @@
 // Written by ladyada, modified for integer use, public domain
 
 #include "TinyDHT.h"
+#include <Wire.h>
+#include <DS3231.h>
+
+RTClib myRTC;
 
 #define DHTPIN 2 // DHT connected to Arduino Uno Digital Pin 2
 #define RAINPIN A0
@@ -39,6 +43,7 @@ void setup()
   pinMode(IN1_PIN, OUTPUT);
   pinMode(IN2_PIN, OUTPUT);
   digitalWrite(ENA_PIN, HIGH);
+  Wire.begin();
 
   dht.begin();
 }
@@ -49,6 +54,10 @@ void loop()
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   int8_t h = dht.readHumidity();
   int16_t t = dht.readTemperature(1);
+
+  DateTime now = myRTC.now();
+
+  Serial.print(now.hour(), DEC);
 
   int sensorValue = analogRead(RAINPIN);
   Serial.print(sensorValue);
