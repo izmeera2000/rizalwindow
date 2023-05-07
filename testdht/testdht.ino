@@ -53,8 +53,9 @@ void loop() {
   int8_t h = dht.readHumidity();
   int16_t t = dht.readTemperature(1);
 
+  Serial.print(" minute :  ");
 
-	Serial.print(myRTC.getMinute(), DEC);
+	Serial.println(myRTC.getMinute(), DEC);
 
   int sensorValue = analogRead(RAINPIN);
   Serial.print(sensorValue);
