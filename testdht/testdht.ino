@@ -7,19 +7,19 @@
 
 RTClib myRTC;
 
-#define DHTPIN 2 // DHT connected to Arduino Uno Digital Pin 2
+#define DHTPIN 2  // DHT connected to Arduino Uno Digital Pin 2
 #define RAINPIN A0
 
 // Uncomment whatever type you're using!
-#define DHTTYPE DHT11 // DHT 11
+#define DHTTYPE DHT11  // DHT 11
 // #define DHTTYPE DHT22   // DHT 22  (AM2302)
 // #define DHTTYPE DHT21   // DHT 21 (AM2301)
-const int ENA_PIN = 7; // the Arduino pin connected to the EN1 pin L298N
-const int IN1_PIN = 6; // the Arduino pin connected to the IN1 pin L298N
-const int IN2_PIN = 5; // the Arduino pin connected to the IN2 pin L298N
+const int ENA_PIN = 7;  // the Arduino pin connected to the EN1 pin L298N
+const int IN1_PIN = 6;  // the Arduino pin connected to the IN1 pin L298N
+const int IN2_PIN = 5;  // the Arduino pin connected to the IN2 pin L298N
 
-const int IN3_PIN = 3; // the Arduino pin connected to the IN3 pin L298N
-const int IN4_PIN = 4; // the Arduino pin connected to the IN4 pin L298N
+const int IN3_PIN = 3;  // the Arduino pin connected to the IN3 pin L298N
+const int IN4_PIN = 4;  // the Arduino pin connected to the IN4 pin L298N
 // Connect pin 1 (on the left) ovf the sensor to +5V
 // Connect pin 2 of the sensor to whatever your DHTPIN is
 // Connect pin 4 (on the right) of the sensor to GROUND
@@ -30,13 +30,12 @@ const int IN4_PIN = 4; // the Arduino pin connected to the IN4 pin L298N
 // rain sensor
 // suhu dht
 // motor slenoid
-// timer
+// timer sda a4 / scl a5
 
 DHT dht(DHTPIN, DHTTYPE);
 
-void setup()
-{
-  Serial.begin(115200); // Output status on Uno serial monitor
+void setup() {
+  Serial.begin(9600);  // Output status on Uno serial monitor
   Serial.println("DHTxx test!");
   pinMode(2, INPUT);
   pinMode(ENA_PIN, OUTPUT);
@@ -48,8 +47,7 @@ void setup()
   dht.begin();
 }
 
-void loop()
-{
+void loop() {
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   int8_t h = dht.readHumidity();
@@ -63,25 +61,20 @@ void loop()
   Serial.print(sensorValue);
   Serial.println(" rain sensor ");
 
-  if (sensorValue <= 800)
-  {
+  if (sensorValue <= 800) {
     digitalWrite(IN1_PIN, LOW);
     digitalWrite(IN2_PIN, HIGH);
-    Serial.print("bUKA ");
-  }
-  else
-  {
+    Serial.print("TUTUP");
+
+  } else {
     digitalWrite(IN1_PIN, HIGH);
     digitalWrite(IN2_PIN, LOW);
-    Serial.print("TUTUP");
+    Serial.print("bUKA ");
   }
   // check if returns are valid then something went wrong!
-  if (t == BAD_TEMP || h == BAD_HUM)
-  { // if error conditions
+  if (t == BAD_TEMP || h == BAD_HUM) {  // if error conditions
     Serial.println("Failed to read from DHT");
-  }
-  else
-  {
+  } else {
     Serial.print("Humidity: ");
     Serial.print(h);
     Serial.print(" %\t");
@@ -89,13 +82,10 @@ void loop()
     Serial.print(t);
     Serial.println(" *C");
 
-    if (t >= 30)
-    {
+    if (t >= 30) {
       digitalWrite(IN3_PIN, HIGH);
       digitalWrite(IN4_PIN, LOW);
-    }
-    else
-    {
+    } else {
       digitalWrite(IN3_PIN, LOW);
       digitalWrite(IN4_PIN, HIGH);
     }
