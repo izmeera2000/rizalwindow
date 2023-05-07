@@ -35,7 +35,7 @@ const int IN4_PIN = 4;  // the Arduino pin connected to the IN4 pin L298N
 DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
-  Serial.begin(9600);  // Output status on Uno serial monitor
+  Serial.begin(115200);  // Output status on Uno serial monitor
   Serial.println("DHTxx test!");
   pinMode(2, INPUT);
   pinMode(ENA_PIN, OUTPUT);
