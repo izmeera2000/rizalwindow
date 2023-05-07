@@ -5,7 +5,7 @@
 #include <Wire.h>
 #include <DS3231.h>
 
-RTClib myRTC;
+DS3231 myRTC;
 
 #define DHTPIN 2  // DHT connected to Arduino Uno Digital Pin 2
 #define RAINPIN A0
@@ -53,9 +53,8 @@ void loop() {
   int8_t h = dht.readHumidity();
   int16_t t = dht.readTemperature(1);
 
-  DateTime now = myRTC.now();
 
-  Serial.print(now.hour(), DEC);
+	Serial.print(myRTC.getMinute(), DEC);
 
   int sensorValue = analogRead(RAINPIN);
   Serial.print(sensorValue);
