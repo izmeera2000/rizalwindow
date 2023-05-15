@@ -103,7 +103,6 @@ void loop()
     Serial.print('10 saat ');
 
     }
-    Serial.print(now.second(), DEC);
 
 
     // calculate a date which is 7 days, 12 hours, 30 minutes, 6 seconds into the future
