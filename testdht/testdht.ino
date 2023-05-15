@@ -103,7 +103,7 @@ void loop()
   Serial.println(" rain sensor ");
 
 //demo
-  if (now.minute() % 3 > 0) 
+  if (now.minute() % 2 > 0) 
   {
     digitalWrite(IN1_PIN, HIGH);
     digitalWrite(IN2_PIN, LOW);
