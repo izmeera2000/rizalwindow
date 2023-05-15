@@ -6,7 +6,6 @@
 #include <DS3231.h>
 #include <time.h>
 
-DS3231 myRTC;
 
 #define DHTPIN 2 // DHT connected to Arduino Uno Digital Pin 2
 #define RAINPIN A0
@@ -35,13 +34,19 @@ const int IN4_PIN = 4; // the Arduino pin connected to the IN4 pin L298N
 
 DHT dht(DHTPIN, DHTTYPE);
 
-byte year;
-byte month;
-byte date;
-byte dOW;
-byte hour;
-byte minute;
-byte second;
+byte year ;
+byte month ;
+byte date ;
+byte dOW ;
+byte hour ;
+byte minute ;
+byte second ;
+bool Century  = false;
+bool h12 ;
+bool PM ;
+
+DS3231 myRTC;
+
 
 void getDateStuff(byte &year, byte &month, byte &date, byte &dOW,
                   byte &hour, byte &minute, byte &second)
@@ -115,9 +120,6 @@ void loop()
 {
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  int8_t h = dht.readHumidity();
-  int16_t t = dht.readTemperature(1);
-
   if (Serial.available())
   {
     getDateStuff(year, month, date, dOW, hour, minute, second);
@@ -138,6 +140,24 @@ void loop()
   Serial.println(minute, DEC);
 
   }
+  
+  int8_t h = dht.readHumidity();
+  int16_t t = dht.readTemperature(1);
+
+
+
+  Serial.print(myRTC.getYear(), DEC);
+  Serial.print("-");
+  Serial.print(myRTC.getMonth(Century), DEC);
+  Serial.print("-");
+  Serial.print(myRTC.getDate(), DEC);
+  Serial.print(" ");
+  Serial.print(myRTC.getHour(h12, PM), DEC); //24-hr
+  Serial.print(":");
+  Serial.print(myRTC.getMinute(), DEC);
+  Serial.print(":");
+  Serial.println(myRTC.getSecond(), DEC);
+  delay(1000);
 
   DateTime currentMoment = RTClib::now();
   Serial.print(" minute 2:  ");
