@@ -98,18 +98,18 @@ void loop()
 
   Serial.print(now.unixtime());
 
-  if (now.unixtime() % 120 == 0)
-  {
-    digitalWrite(IN1_PIN, HIGH);
-    digitalWrite(IN2_PIN, LOW);
-    Serial.print("bUKA timer ");
-  }
-  else
-  {
-    digitalWrite(IN1_PIN, LOW);
-    digitalWrite(IN2_PIN, HIGH);
-    Serial.print("TUTUP timer");
-  }
+  // if (now.unixtime() % 120 == 0)
+  // {
+  //   digitalWrite(IN1_PIN, HIGH);
+  //   digitalWrite(IN2_PIN, LOW);
+  //   Serial.print("TUTUP timer ");
+  // }
+  // else
+  // {
+  //   digitalWrite(IN1_PIN, LOW);
+  //   digitalWrite(IN2_PIN, HIGH);
+  //   Serial.print("BUKA timer");
+  // }
 
   Serial.println();
 
@@ -117,18 +117,30 @@ void loop()
   Serial.print(sensorValue);
   Serial.println(" rain sensor ");
 
-  if (sensorValue <= 800)
+  if (sensorValue <= 800 && now.unixtime() % 120 == 0)
   {
 
     digitalWrite(IN1_PIN, HIGH);
     digitalWrite(IN2_PIN, LOW);
-    Serial.print("bUKA ");
+    Serial.print("TUTUP hujan");
   }
-  else
+  else if (sensorValue >= 800 && now.unixtime() % 120 == 0)
   {
     digitalWrite(IN1_PIN, LOW);
     digitalWrite(IN2_PIN, HIGH);
-    Serial.print("TUTUP");
+    Serial.print("BUKA hujan");
+  }
+  else if (sensorValue >= 800 && now.unixtime() % 120 != 0)
+  {
+
+    digitalWrite(IN1_PIN, LOW);
+    digitalWrite(IN2_PIN, HIGH);
+    Serial.print("BUKA timer");
+  }
+  else
+  {
+
+    Serial.print("tah");
   }
   // check if returns are valid then something went wrong!
   if (t == BAD_TEMP || h == BAD_HUM)
