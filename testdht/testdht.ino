@@ -106,14 +106,12 @@ void loop()
 
   if (now.unixtime() % 120 == 0)
   {
-
     digitalWrite(IN1_PIN, HIGH);
     digitalWrite(IN2_PIN, LOW);
     Serial.print("TUTUP hujan");
   }
   else
   {
-
     if (sensorValue <= 800)
     {
 
