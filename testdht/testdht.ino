@@ -97,72 +97,53 @@ void loop() {
   Serial.print(now.unixtime());
   Serial.print("s = ");
 
-  if (now.unixtime() % 60 == 0) {
-    Serial.print("gapo mung");
+  if (now.unixtime() % 600 == 0) {
+    Serial.println("gapo mung");
   }
-
-  // calculate a date which is 7 days, 12 hours, 30 minutes, 6 seconds into the future
-  // DateTime future(now + TimeSpan(0, 0, 1, 0));
-
-  // Serial.print(" now + 0d + 0h + 1m + 0s: ");
-  // Serial.print(future.year(), DEC);
-  // Serial.print('/');
-  // Serial.print(future.month(), DEC);
-  // Serial.print('/');
-  // Serial.print(future.day(), DEC);
-  // Serial.print(' ');
-  // Serial.print(future.hour(), DEC);
-  // Serial.print(':');
-  // Serial.print(future.minute(), DEC);
-  // Serial.print(':');
-  // Serial.print(future.second(), DEC);
-  // Serial.println();
-
-
 
   Serial.println();
 
-  // int sensorValue = analogRead(RAINPIN);
-  // Serial.print(sensorValue);
-  // Serial.println(" rain sensor ");
+  int sensorValue = analogRead(RAINPIN);
+  Serial.print(sensorValue);
+  Serial.println(" rain sensor ");
 
-  // if (sensorValue <= 800)
-  // {
-  //   digitalWrite(IN1_PIN, LOW);
-  //   digitalWrite(IN2_PIN, HIGH);
-  //   Serial.print("TUTUP");
-  // }
-  // else
-  // {
-  //   digitalWrite(IN1_PIN, HIGH);
-  //   digitalWrite(IN2_PIN, LOW);
-  //   Serial.print("bUKA ");
-  // }
-  // // check if returns are valid then something went wrong!
-  // if (t == BAD_TEMP || h == BAD_HUM)
-  // { // if error conditions
-  //   Serial.println("Failed to read from DHT");
-  // }
-  // else
-  // {
-  //   Serial.print("Humidity: ");
-  //   Serial.print(h);
-  //   Serial.print(" %\t");
-  //   Serial.print("Temperature: ");
-  //   Serial.print(t);
-  //   Serial.println(" *C");
+  if (sensorValue <= 800)
+  {
+    digitalWrite(IN1_PIN, LOW);
+    digitalWrite(IN2_PIN, HIGH);
+    Serial.print("TUTUP");
+  }
+  else
+  {
+    digitalWrite(IN1_PIN, HIGH);
+    digitalWrite(IN2_PIN, LOW);
+    Serial.print("bUKA ");
+  }
+  // check if returns are valid then something went wrong!
+  if (t == BAD_TEMP || h == BAD_HUM)
+  { // if error conditions
+    Serial.println("Failed to read from DHT");
+  }
+  else
+  {
+    Serial.print("Humidity: ");
+    Serial.print(h);
+    Serial.print(" %\t");
+    Serial.print("Temperature: ");
+    Serial.print(t);
+    Serial.println(" *C");
 
-  //   if (t >= 30)
-  //   {
-  //     digitalWrite(IN3_PIN, HIGH);
-  //     digitalWrite(IN4_PIN, LOW);
-  //   }
-  //   else
-  //   {
-  //     digitalWrite(IN3_PIN, LOW);
-  //     digitalWrite(IN4_PIN, HIGH);
-  //   }
-  // }
+    if (t >= 30)
+    {
+      digitalWrite(IN3_PIN, HIGH);
+      digitalWrite(IN4_PIN, LOW);
+    }
+    else
+    {
+      digitalWrite(IN3_PIN, LOW);
+      digitalWrite(IN4_PIN, HIGH);
+    }
+  }
 
   delay(2000);
 }
