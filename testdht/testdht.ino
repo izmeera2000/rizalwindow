@@ -3,7 +3,6 @@
 
 #include "TinyDHT.h"
 #include <Wire.h>
-// #include <DS3231.h>
 #include <time.h>
 #include "RTClib.h"
 
