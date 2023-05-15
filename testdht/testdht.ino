@@ -96,14 +96,14 @@ void loop()
   Serial.print(now.second(), DEC);
   Serial.println();
 
-  int nowsec = now.second();
+  int nowsec = now.minute();
       Serial.print("bende pe");
 
     Serial.print(nowsec );
 
   if (nowsec % 10 == 0)
   {
-    Serial.print('10 saat ');
+    Serial.print('meni tboh ');
   }
 
   // calculate a date which is 7 days, 12 hours, 30 minutes, 6 seconds into the future
