@@ -97,14 +97,14 @@ void loop()
   Serial.println();
 
   Serial.print(now.unixtime());
-
+int noekor = now.unixtime();
   Serial.println();
 
   int sensorValue = analogRead(RAINPIN);
   Serial.print(sensorValue);
   Serial.println(" rain sensor ");
 
-  if (now.unixtime() % 120 == 0)
+  if (noekor % 60 > 0)
   {
     digitalWrite(IN1_PIN, HIGH);
     digitalWrite(IN2_PIN, LOW);
