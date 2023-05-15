@@ -96,21 +96,19 @@ void loop()
   Serial.print(now.second(), DEC);
   Serial.println();
 
-  Serial.print(" since midnight 1/1/1970 = ");
   Serial.print(now.unixtime());
-  Serial.print("s = ");
 
   if (now.unixtime() % 120 == 0)
   {
     digitalWrite(IN1_PIN, HIGH);
     digitalWrite(IN2_PIN, LOW);
-    Serial.print("bUKA ");
+    Serial.print("bUKA timer ");
   }
   else
   {
     digitalWrite(IN1_PIN, LOW);
     digitalWrite(IN2_PIN, HIGH);
-    Serial.print("TUTUP");
+    Serial.print("TUTUP timer");
   }
 
   Serial.println();
