@@ -104,7 +104,7 @@ void loop()
   Serial.println(" rain sensor ");
 
 //demo
-  if (now.minute() % 2 > 0)
+  if (now.minute() % 2 > 0) 
   {
     digitalWrite(IN1_PIN, HIGH);
     digitalWrite(IN2_PIN, LOW);
@@ -129,28 +129,30 @@ void loop()
 
 
 //real
-  if (now.hour() == 07)
-  {
-    if (sensorValue <= 800)
-    {
+  // if (now.hour() == 07)
+  // {
+  //   if (sensorValue <= 800)
+  //   {
 
-      digitalWrite(IN1_PIN, HIGH);
-      digitalWrite(IN2_PIN, LOW);
-      Serial.print("TUTUP hujan");
-    }
-    else
-    {
-      digitalWrite(IN1_PIN, LOW);
-      digitalWrite(IN2_PIN, HIGH);
-      Serial.print("BUKA hujan");
-    }
-  }
-  if (now.hour() == 19)
-  {
-    digitalWrite(IN1_PIN, HIGH);
-    digitalWrite(IN2_PIN, LOW);
-    Serial.print("TUTUP hujan");
-  }
+  //     digitalWrite(IN1_PIN, HIGH);
+  //     digitalWrite(IN2_PIN, LOW);
+  //     Serial.print("TUTUP hujan");
+  //   }
+  //   else
+  //   {
+  //     digitalWrite(IN1_PIN, LOW);
+  //     digitalWrite(IN2_PIN, HIGH);
+  //     Serial.print("BUKA hujan");
+  //   }
+  // }
+  // if (now.hour() == 19)
+  // {
+  //   digitalWrite(IN1_PIN, HIGH);
+  //   digitalWrite(IN2_PIN, LOW);
+  //   Serial.print("TUTUP hujan");
+  // }
+
+
   // check if returns are valid then something went wrong!
   if (t == BAD_TEMP || h == BAD_HUM)
   { // if error conditions
