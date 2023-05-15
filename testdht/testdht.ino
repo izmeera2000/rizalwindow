@@ -76,6 +76,7 @@ void loop()
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
 
+//sensor suhu
   int8_t h = dht.readHumidity();
   int16_t t = dht.readTemperature(1);
 
@@ -96,19 +97,13 @@ void loop()
   Serial.print(now.second(), DEC);
   Serial.println();
 
-  Serial.print(now.unixtime());
-  int noekor = now.unixtime();
-  Serial.println();
-  int gay = now.unixtime() % 120;
 
-  Serial.print(gay);
-
+//rain sensor value
   int sensorValue = analogRead(RAINPIN);
   Serial.print(sensorValue);
   Serial.println(" rain sensor ");
 
-
-
+//demo
   if (now.minute() % 2 > 0)
   {
     digitalWrite(IN1_PIN, HIGH);
@@ -132,20 +127,30 @@ void loop()
     }
   }
 
-  // if (sensorValue <= 800)
-  // {
 
-  //   digitalWrite(IN1_PIN, HIGH);
-  //   digitalWrite(IN2_PIN, LOW);
-  //   Serial.print("TUTUP hujan");
-  // }
-  // else
-  // {
-  //   digitalWrite(IN1_PIN, LOW);
-  //   digitalWrite(IN2_PIN, HIGH);
-  //   Serial.print("BUKA hujan");
-  // }
+//real
+  if (now.hour() == 07)
+  {
+    if (sensorValue <= 800)
+    {
 
+      digitalWrite(IN1_PIN, HIGH);
+      digitalWrite(IN2_PIN, LOW);
+      Serial.print("TUTUP hujan");
+    }
+    else
+    {
+      digitalWrite(IN1_PIN, LOW);
+      digitalWrite(IN2_PIN, HIGH);
+      Serial.print("BUKA hujan");
+    }
+  }
+  if (now.hour() == 19)
+  {
+    digitalWrite(IN1_PIN, HIGH);
+    digitalWrite(IN2_PIN, LOW);
+    Serial.print("TUTUP hujan");
+  }
   // check if returns are valid then something went wrong!
   if (t == BAD_TEMP || h == BAD_HUM)
   { // if error conditions
@@ -153,9 +158,9 @@ void loop()
   }
   else
   {
-    Serial.print("Humidity: ");
-    Serial.print(h);
-    Serial.print(" %\t");
+    // Serial.print("Humidity: ");
+    // Serial.print(h);
+    // Serial.print(" %\t");
     Serial.print("Temperature: ");
     Serial.print(t);
     Serial.println(" *C");
