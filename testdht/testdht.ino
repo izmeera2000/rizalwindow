@@ -97,6 +97,9 @@ void loop()
   Serial.println();
 
   int nowsec = now.second();
+      Serial.print("bende pe");
+
+    Serial.print(nowsec );
 
   if (nowsec % 10 == 0)
   {
