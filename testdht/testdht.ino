@@ -38,8 +38,6 @@ const int IN4_PIN = 4; // the Arduino pin connected to the IN4 pin L298N
 
 DHT dht(DHTPIN, DHTTYPE);
 
-
-
 void setup()
 {
   Serial.begin(115200); // Output status on Uno serial monitor
@@ -53,13 +51,16 @@ void setup()
 
   dht.begin();
 
-   if (! rtc.begin()) {
+  if (!rtc.begin())
+  {
     Serial.println("Couldn't find RTC");
     Serial.flush();
-    while (1) delay(10);
+    while (1)
+      delay(10);
   }
 
-  if (rtc.lostPower()) {
+  if (rtc.lostPower())
+  {
     Serial.println("RTC lost power, let's set the time!");
     // When time needs to be set on a new device, or after a power loss, the
     // following line sets the RTC to the date & time this sketch was compiled
@@ -78,54 +79,48 @@ void loop()
   int8_t h = dht.readHumidity();
   int16_t t = dht.readTemperature(1);
 
-
-
-
   DateTime now = rtc.now();
 
-    Serial.print(now.year(), DEC);
-    Serial.print('/');
-    Serial.print(now.month(), DEC);
-    Serial.print('/');
-    Serial.print(now.day(), DEC);
-    Serial.print(" (");
-    Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
-    Serial.print(") ");
-    Serial.print(now.hour(), DEC);
-    Serial.print(':');
-    Serial.print(now.minute(), DEC);
-    Serial.print(':');
-    Serial.print(now.second(), DEC);
-    Serial.println();
+  Serial.print(now.year(), DEC);
+  Serial.print('/');
+  Serial.print(now.month(), DEC);
+  Serial.print('/');
+  Serial.print(now.day(), DEC);
+  Serial.print(" (");
+  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
+  Serial.print(") ");
+  Serial.print(now.hour(), DEC);
+  Serial.print(':');
+  Serial.print(now.minute(), DEC);
+  Serial.print(':');
+  Serial.print(now.second(), DEC);
+  Serial.println();
 
-    if (now.second()%10 == 0)
-    {
+  int nowsec = now.second();
+
+  if (nowsec % 10 == 0)
+  {
     Serial.print('10 saat ');
+  }
 
-    }
+  // calculate a date which is 7 days, 12 hours, 30 minutes, 6 seconds into the future
+  DateTime future(now + TimeSpan(7, 12, 30, 6));
 
+  Serial.print(" now + 7d + 12h + 30m + 6s: ");
+  Serial.print(future.year(), DEC);
+  Serial.print('/');
+  Serial.print(future.month(), DEC);
+  Serial.print('/');
+  Serial.print(future.day(), DEC);
+  Serial.print(' ');
+  Serial.print(future.hour(), DEC);
+  Serial.print(':');
+  Serial.print(future.minute(), DEC);
+  Serial.print(':');
+  Serial.print(future.second(), DEC);
+  Serial.println();
 
-    // calculate a date which is 7 days, 12 hours, 30 minutes, 6 seconds into the future
-    DateTime future (now + TimeSpan(7,12,30,6));
-
-    Serial.print(" now + 7d + 12h + 30m + 6s: ");
-    Serial.print(future.year(), DEC);
-    Serial.print('/');
-    Serial.print(future.month(), DEC);
-    Serial.print('/');
-    Serial.print(future.day(), DEC);
-    Serial.print(' ');
-    Serial.print(future.hour(), DEC);
-    Serial.print(':');
-    Serial.print(future.minute(), DEC);
-    Serial.print(':');
-    Serial.print(future.second(), DEC);
-    Serial.println();
-
- 
-
-    Serial.println();
-
+  Serial.println();
 
   // int sensorValue = analogRead(RAINPIN);
   // Serial.print(sensorValue);
@@ -168,7 +163,6 @@ void loop()
   //     digitalWrite(IN4_PIN, HIGH);
   //   }
   // }
-
 
   delay(2000);
 }
