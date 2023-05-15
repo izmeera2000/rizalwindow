@@ -106,7 +106,10 @@ void loop()
   int sensorValue = analogRead(RAINPIN);
   Serial.print(sensorValue);
   Serial.println(" rain sensor ");
-  if (noekor % 120 > 0)
+
+
+
+  if (now.minute() % 2 > 0)
   {
     digitalWrite(IN1_PIN, HIGH);
     digitalWrite(IN2_PIN, LOW);
