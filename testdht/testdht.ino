@@ -98,11 +98,13 @@ void loop()
     Serial.print(now.second(), DEC);
     Serial.println();
 
-    Serial.print(" since midnight 1/1/1970 = ");
-    Serial.print(now.unixtime());
-    Serial.print("s = ");
-    Serial.print(now.unixtime() / 86400L);
-    Serial.println("d");
+    if (now.second()%10 == 0)
+    {
+    Serial.print('10 saat ');
+
+    }
+    Serial.print(now.second(), DEC);
+
 
     // calculate a date which is 7 days, 12 hours, 30 minutes, 6 seconds into the future
     DateTime future (now + TimeSpan(7,12,30,6));
@@ -121,9 +123,7 @@ void loop()
     Serial.print(future.second(), DEC);
     Serial.println();
 
-    Serial.print("Temperature: ");
-    Serial.print(rtc.getTemperature());
-    Serial.println(" C");
+ 
 
     Serial.println();
 
