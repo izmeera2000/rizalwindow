@@ -104,7 +104,7 @@ int noekor = now.unixtime();
   Serial.print(sensorValue);
   Serial.println(" rain sensor ");
 
-  if (noekor % 60 > 0)
+  if (noekor % 120 > 0)
   {
     digitalWrite(IN1_PIN, HIGH);
     digitalWrite(IN2_PIN, LOW);
