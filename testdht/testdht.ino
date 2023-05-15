@@ -97,8 +97,12 @@ void loop() {
   Serial.print(now.unixtime());
   Serial.print("s = ");
 
-  if (now.unixtime() % 600 == 0) {
+  if (now.unixtime() % 120 == 0) {
     Serial.println("gapo mung");
+  }
+  else{
+        Serial.println("takde gapo");
+
   }
 
   Serial.println();
