@@ -5,7 +5,7 @@
 #include <Wire.h>
 #include <time.h>
 #include "RTClib.h"
-
+// int lastreportt = 0;
 RTC_DS3231 rtc;
 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -75,10 +75,16 @@ void loop()
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
 
-//sensor suhu
+  // sensor suhu
   int8_t h = dht.readHumidity();
   int16_t t = dht.readTemperature(1);
 
+  // if (rtc.now().minute() - lastreportt > 2)
+  // {
+
+  // lastreportt = rtc.now().minute();
+
+  // }
   DateTime now = rtc.now();
 
   Serial.print(now.year(), DEC);
@@ -96,14 +102,13 @@ void loop()
   Serial.print(now.second(), DEC);
   Serial.println();
 
-
-//rain sensor value
+  // rain sensor value
   int sensorValue = analogRead(RAINPIN);
   Serial.print(sensorValue);
   Serial.println(" rain sensor ");
 
-//demo
-  if (now.minute() % 2 > 0) 
+  // demo
+  if (now.minute() % 2 > 0)
   {
     digitalWrite(IN1_PIN, HIGH);
     digitalWrite(IN2_PIN, LOW);
@@ -126,12 +131,11 @@ void loop()
     }
   }
 
-
-//real
-  // if (now.hour() == 07)
-  // {
-  //   if (sensorValue <= 800)
-  //   {
+  // real
+  //  if (now.hour() == 07)
+  //  {
+  //    if (sensorValue <= 800)
+  //    {
 
   //     digitalWrite(IN1_PIN, HIGH);
   //     digitalWrite(IN2_PIN, LOW);
@@ -150,7 +154,6 @@ void loop()
   //   digitalWrite(IN2_PIN, LOW);
   //   Serial.print("TUTUP hujan");
   // }
-
 
   // check if returns are valid then something went wrong!
   if (t == BAD_TEMP || h == BAD_HUM)
