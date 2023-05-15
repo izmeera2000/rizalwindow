@@ -3,9 +3,13 @@
 
 #include "TinyDHT.h"
 #include <Wire.h>
-#include <DS3231.h>
+// #include <DS3231.h>
 #include <time.h>
+#include "RTClib.h"
 
+RTC_DS3231 rtc;
+
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
 #define DHTPIN 2 // DHT connected to Arduino Uno Digital Pin 2
 #define RAINPIN A0
@@ -34,73 +38,7 @@ const int IN4_PIN = 4; // the Arduino pin connected to the IN4 pin L298N
 
 DHT dht(DHTPIN, DHTTYPE);
 
-byte year ;
-byte month ;
-byte date ;
-byte dOW ;
-byte hour ;
-byte minute ;
-byte second ;
-bool Century  = false;
-bool h12 ;
-bool PM ;
 
-DS3231 myRTC;
-
-
-void getDateStuff(byte &year, byte &month, byte &date, byte &dOW,
-                  byte &hour, byte &minute, byte &second)
-{
-  // Call this if you notice something coming in on
-  // the serial port. The stuff coming in should be in
-  // the order YYMMDDwHHMMSS, with an 'x' at the end.
-  boolean gotString = false;
-  char inChar;
-  byte temp1, temp2;
-  char inString[20];
-
-  byte j = 0;
-  while (!gotString)
-  {
-    if (Serial.available())
-    {
-      inChar = Serial.read();
-      inString[j] = inChar;
-      j += 1;
-      if (inChar == 'x')
-      {
-        gotString = true;
-      }
-    }
-  }
-  Serial.println(inString);
-  // Read year first
-  temp1 = (byte)inString[0] - 48;
-  temp2 = (byte)inString[1] - 48;
-  year = temp1 * 10 + temp2;
-  // now month
-  temp1 = (byte)inString[2] - 48;
-  temp2 = (byte)inString[3] - 48;
-  month = temp1 * 10 + temp2;
-  // now date
-  temp1 = (byte)inString[4] - 48;
-  temp2 = (byte)inString[5] - 48;
-  date = temp1 * 10 + temp2;
-  // now Day of Week
-  dOW = (byte)inString[6] - 48;
-  // now hour
-  temp1 = (byte)inString[7] - 48;
-  temp2 = (byte)inString[8] - 48;
-  hour = temp1 * 10 + temp2;
-  // now minute
-  temp1 = (byte)inString[9] - 48;
-  temp2 = (byte)inString[10] - 48;
-  minute = temp1 * 10 + temp2;
-  // now second
-  temp1 = (byte)inString[11] - 48;
-  temp2 = (byte)inString[12] - 48;
-  second = temp1 * 10 + temp2;
-}
 
 void setup()
 {
@@ -114,102 +52,124 @@ void setup()
   Wire.begin();
 
   dht.begin();
+
+   if (! rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    Serial.flush();
+    while (1) delay(10);
+  }
+
+  if (rtc.lostPower()) {
+    Serial.println("RTC lost power, let's set the time!");
+    // When time needs to be set on a new device, or after a power loss, the
+    // following line sets the RTC to the date & time this sketch was compiled
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    // This line sets the RTC with an explicit date & time, for example to set
+    // January 21, 2014 at 3am you would call:
+    // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+  }
 }
 
 void loop()
 {
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  if (Serial.available())
-  {
-    getDateStuff(year, month, date, dOW, hour, minute, second);
 
-    myRTC.setClockMode(false); // set to 24h
-    // setClockMode(true); // set to 12h
-
-    myRTC.setYear(year);
-    myRTC.setMonth(month);
-    myRTC.setDate(date);
-    myRTC.setDoW(dOW);
-    myRTC.setHour(hour);
-    myRTC.setMinute(minute);
-    myRTC.setSecond(second);
-
-  Serial.print(" minute set :  ");
-
-  Serial.println(minute, DEC);
-
-  }
-  
   int8_t h = dht.readHumidity();
   int16_t t = dht.readTemperature(1);
 
 
 
-  Serial.print(myRTC.getYear(), DEC);
-  Serial.print("-");
-  Serial.print(myRTC.getMonth(Century), DEC);
-  Serial.print("-");
-  Serial.print(myRTC.getDate(), DEC);
-  Serial.print(" ");
-  Serial.print(myRTC.getHour(h12, PM), DEC); //24-hr
-  Serial.print(":");
-  Serial.print(myRTC.getMinute(), DEC);
-  Serial.print(":");
-  Serial.println(myRTC.getSecond(), DEC);
-  delay(1000);
 
-  DateTime currentMoment = RTClib::now();
-  Serial.print(" minute 2:  ");
+  DateTime now = rtc.now();
 
-  Serial.print(currentMoment.minute(), DEC);
+    Serial.print(now.year(), DEC);
+    Serial.print('/');
+    Serial.print(now.month(), DEC);
+    Serial.print('/');
+    Serial.print(now.day(), DEC);
+    Serial.print(" (");
+    Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
+    Serial.print(") ");
+    Serial.print(now.hour(), DEC);
+    Serial.print(':');
+    Serial.print(now.minute(), DEC);
+    Serial.print(':');
+    Serial.print(now.second(), DEC);
+    Serial.println();
 
+    Serial.print(" since midnight 1/1/1970 = ");
+    Serial.print(now.unixtime());
+    Serial.print("s = ");
+    Serial.print(now.unixtime() / 86400L);
+    Serial.println("d");
 
+    // calculate a date which is 7 days, 12 hours, 30 minutes, 6 seconds into the future
+    DateTime future (now + TimeSpan(7,12,30,6));
 
-  Serial.print(" minute :  ");
+    Serial.print(" now + 7d + 12h + 30m + 6s: ");
+    Serial.print(future.year(), DEC);
+    Serial.print('/');
+    Serial.print(future.month(), DEC);
+    Serial.print('/');
+    Serial.print(future.day(), DEC);
+    Serial.print(' ');
+    Serial.print(future.hour(), DEC);
+    Serial.print(':');
+    Serial.print(future.minute(), DEC);
+    Serial.print(':');
+    Serial.print(future.second(), DEC);
+    Serial.println();
 
-  Serial.println(myRTC.getMinute(), DEC);
-
-  int sensorValue = analogRead(RAINPIN);
-  Serial.print(sensorValue);
-  Serial.println(" rain sensor ");
-
-  if (sensorValue <= 800)
-  {
-    digitalWrite(IN1_PIN, LOW);
-    digitalWrite(IN2_PIN, HIGH);
-    Serial.print("TUTUP");
-  }
-  else
-  {
-    digitalWrite(IN1_PIN, HIGH);
-    digitalWrite(IN2_PIN, LOW);
-    Serial.print("bUKA ");
-  }
-  // check if returns are valid then something went wrong!
-  if (t == BAD_TEMP || h == BAD_HUM)
-  { // if error conditions
-    Serial.println("Failed to read from DHT");
-  }
-  else
-  {
-    Serial.print("Humidity: ");
-    Serial.print(h);
-    Serial.print(" %\t");
     Serial.print("Temperature: ");
-    Serial.print(t);
-    Serial.println(" *C");
+    Serial.print(rtc.getTemperature());
+    Serial.println(" C");
 
-    if (t >= 30)
-    {
-      digitalWrite(IN3_PIN, HIGH);
-      digitalWrite(IN4_PIN, LOW);
-    }
-    else
-    {
-      digitalWrite(IN3_PIN, LOW);
-      digitalWrite(IN4_PIN, HIGH);
-    }
-  }
+    Serial.println();
+
+
+  // int sensorValue = analogRead(RAINPIN);
+  // Serial.print(sensorValue);
+  // Serial.println(" rain sensor ");
+
+  // if (sensorValue <= 800)
+  // {
+  //   digitalWrite(IN1_PIN, LOW);
+  //   digitalWrite(IN2_PIN, HIGH);
+  //   Serial.print("TUTUP");
+  // }
+  // else
+  // {
+  //   digitalWrite(IN1_PIN, HIGH);
+  //   digitalWrite(IN2_PIN, LOW);
+  //   Serial.print("bUKA ");
+  // }
+  // // check if returns are valid then something went wrong!
+  // if (t == BAD_TEMP || h == BAD_HUM)
+  // { // if error conditions
+  //   Serial.println("Failed to read from DHT");
+  // }
+  // else
+  // {
+  //   Serial.print("Humidity: ");
+  //   Serial.print(h);
+  //   Serial.print(" %\t");
+  //   Serial.print("Temperature: ");
+  //   Serial.print(t);
+  //   Serial.println(" *C");
+
+  //   if (t >= 30)
+  //   {
+  //     digitalWrite(IN3_PIN, HIGH);
+  //     digitalWrite(IN4_PIN, LOW);
+  //   }
+  //   else
+  //   {
+  //     digitalWrite(IN3_PIN, LOW);
+  //     digitalWrite(IN4_PIN, HIGH);
+  //   }
+  // }
+
+
   delay(2000);
 }
